@@ -1,6 +1,6 @@
 {
   "name": "trenchfeed-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "CLI for TrenchFeed — deploy and manage AI trading agents on Solana from your terminal.",
   "main": "dist/index.js",
   "bin": { "trenchfeed": "dist/index.js" },
