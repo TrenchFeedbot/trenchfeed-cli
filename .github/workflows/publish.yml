@@ -17,8 +17,9 @@ jobs:
           registry-url: https://npm.pkg.github.com
           scope: '@trenchfeedbot'
       - run: |
-          cd /tmp
-          cat > package.json << 'PKGEOF'
+          mkdir -p pkg/dist
+          cp dist/* pkg/dist/
+          cat > pkg/package.json << 'PKGEOF'
           {
             "name": "@trenchfeedbot/trenchfeed-cli",
             "version": "0.2.2",
@@ -30,8 +31,6 @@ jobs:
             "license": "MIT"
           }
           PKGEOF
-          mkdir -p dist
-          cp $GITHUB_WORKSPACE/dist/* dist/
-          npm publish --access public
+          cd pkg && npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
