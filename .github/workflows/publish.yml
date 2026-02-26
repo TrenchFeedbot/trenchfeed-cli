@@ -1,0 +1,37 @@
+name: Publish to GitHub Packages
+on:
+  workflow_dispatch:
+
+permissions:
+  packages: write
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com
+          scope: '@trenchfeedbot'
+      - run: |
+          cd /tmp
+          cat > package.json << 'PKGEOF'
+          {
+            "name": "@trenchfeedbot/trenchfeed-cli",
+            "version": "0.2.2",
+            "description": "CLI for TrenchFeed — deploy and manage AI trading agents on Solana",
+            "main": "dist/index.js",
+            "bin": { "trenchfeed": "dist/index.js" },
+            "repository": { "type": "git", "url": "https://github.com/TrenchFeedbot/trenchfeed-cli.git" },
+            "publishConfig": { "registry": "https://npm.pkg.github.com", "access": "public" },
+            "license": "MIT"
+          }
+          PKGEOF
+          mkdir -p dist
+          cp $GITHUB_WORKSPACE/dist/* dist/
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
